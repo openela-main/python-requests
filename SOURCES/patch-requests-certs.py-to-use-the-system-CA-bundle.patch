@@ -1,0 +1,29 @@
+diff --color -Nur requests-2.25.1.orig/requests/certs.py requests-2.25.1/requests/certs.py
+--- requests-2.25.1.orig/requests/certs.py	2021-01-10 16:27:05.027059634 -0800
++++ requests-2.25.1/requests/certs.py	2021-01-10 16:29:06.973238179 -0800
+@@ -10,8 +10,13 @@
+ If you are packaging Requests, e.g., for a Linux distribution or a managed
+ environment, you can change the definition of where() to return a separately
+ packaged CA bundle.
++
++This Fedora-patched package returns "/etc/pki/tls/certs/ca-bundle.crt" provided
++by the ca-certificates RPM package.
+ """
+-from certifi import where
++def where():
++    """Return the absolute path to the system CA bundle."""
++    return '/etc/pki/tls/certs/ca-bundle.crt'
+ 
+ if __name__ == '__main__':
+     print(where())
+diff --color -Nur requests-2.25.1.orig/setup.py requests-2.25.1/setup.py
+--- requests-2.25.1.orig/setup.py	2020-12-16 11:34:26.000000000 -0800
++++ requests-2.25.1/setup.py	2021-01-10 16:29:21.570259552 -0800
+@@ -45,7 +45,6 @@
+     'chardet>=3.0.2,<5',
+     'idna>=2.5,<3',
+     'urllib3>=1.21.1,<1.27',
+-    'certifi>=2017.4.17'
+ 
+ ]
+ test_requirements = [
