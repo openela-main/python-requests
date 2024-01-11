@@ -3,7 +3,7 @@
 
 Name:           python-requests
 Version:        2.25.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -22,6 +22,12 @@ Patch2:         Remove-tests-that-use-the-tarpit.patch
 # could technically be IPv6 or something, and our no-network env is
 # a pretty odd one so this is a niche requirement.
 Patch3:         requests-2.12.4-tests_nonet.patch
+
+# Security fix for CVE-2023-32681
+# Unintended leak of Proxy-Authorization header
+# Resolved upstream: https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5
+# Tracking bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2209469
+Patch4:         CVE-2023-32681.patch
 
 BuildArch:      noarch
 # Exclude i686 arch. Due to a modularity issue it's being added to the
@@ -103,6 +109,10 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Wed Jun 21 2023 Lumír Balhar <lbalhar@redhat.com> - 2.25.0-3
+- Security fix for CVE-2023-32681
+Resolves: rhbz#2209469
+
 * Mon Jan 18 2021 Tomas Orsava <torsava@redhat.com> - 2.25.0-2
 - Convert from Fedora to the python39 module in RHEL8
 - Resolves: rhbz#1877430
