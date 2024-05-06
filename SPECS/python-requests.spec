@@ -5,7 +5,7 @@
 
 Name:           python-requests
 Version:        2.25.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -44,6 +44,13 @@ Patch4:         Empty-security-extras.patch
 # Resolved upstream: https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5
 # Tracking bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2209469
 Patch5:         CVE-2023-32681.patch
+
+# Add support for IPv6 CIDR in no_proxy setting
+# This functionality is needed in Openshift and it has been
+# proposed for upstream in 2021 but the PR unfortunately stalled.
+# Issue: https://issues.redhat.com/browse/RHEL-17548
+# Upstream PR: https://github.com/psf/requests/pull/5953
+Patch6:         support_IPv6_CIDR_in_no_proxy.patch
 
 BuildArch:      noarch
 
@@ -120,6 +127,10 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Tue Jan 02 2024 Lumír Balhar <lbalhar@redhat.com> - 2.25.1-8
+- Add support for IPv6 CIDR in no_proxy setting
+Resolves: RHEL-17548
+
 * Fri Jun 16 2023 Charalampos Stratakis <cstratak@redhat.com> - 2.25.1-7
 - Security fix for CVE-2023-32681
 Resolves: rhbz#2209469
