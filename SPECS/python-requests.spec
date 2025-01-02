@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.20.0
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -49,6 +49,17 @@ Patch6:         properly-handle-default-ports-in-auth-stripping.patch
 # Resolved upstream: https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5
 # Tracking bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2209469
 Patch7:         CVE-2023-32681.patch
+
+# Security fix for CVE-2024-35195
+# Subsequent requests to the same host ignore cert verification.
+# The patch is a combination of many upstream changes. Each commit contains
+# the respective upstream commit. The first one is the fix for the vulnerability
+# see: https://github.com/psf/requests/pull/6655
+# and the rest tries to make it more backward compatible.
+# The last commit is still a draft upstream and therefore the link points to the PR.
+# PR: https://github.com/psf/requests/pull/6731
+# The issue it tries to solve: https://github.com/psf/requests/issues/6726
+Patch8:         CVE-2024-35195.patch
 
 BuildArch:      noarch
 
@@ -112,12 +123,16 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
-* Mon Jun 26 2023 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-3
+* Tue Dec 17 2024 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-5
+- Security fix for CVE-2024-35195
+Resolves: RHEL-37605
+
+* Mon Jun 26 2023 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-4
 - Bump release to fix upgrade path
   from 2.20.0-2.1.el8_1 via 2.20.0-3.el8_8 to 2.20.0-4.el8
 Related: rhbz#2209469
 
-* Wed Jun 21 2023 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-2.1
+* Wed Jun 21 2023 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-3
 - Security fix for CVE-2023-32681
 Resolves: rhbz#2209469
 
