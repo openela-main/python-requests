@@ -5,7 +5,7 @@
 
 Name:           python-requests
 Version:        2.25.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -51,6 +51,17 @@ Patch5:         CVE-2023-32681.patch
 # Issue: https://issues.redhat.com/browse/RHEL-17548
 # Upstream PR: https://github.com/psf/requests/pull/5953
 Patch6:         support_IPv6_CIDR_in_no_proxy.patch
+
+# Security fix for CVE-2024-35195
+# Subsequent requests to the same host ignore cert verification.
+# The patch is a combination of many upstream changes. Each commit contains
+# the respective upstream commit. The first one is the fix for the vulnerability
+# see: https://github.com/psf/requests/pull/6655
+# and the rest tries to make it more backward compatible.
+# The last commit is still a draft upstream and therefore the link points to the PR.
+# PR: https://github.com/psf/requests/pull/6731
+# The issue it tries to solve: https://github.com/psf/requests/issues/6726
+Patch7:         CVE-2024-35195.patch
 
 BuildArch:      noarch
 
@@ -127,6 +138,10 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Jan 10 2025 Lumír Balhar <lbalhar@redhat.com> - 2.25.1-9
+- Security fix for CVE-2024-35195
+Resolves: RHEL-37609
+
 * Tue Jan 02 2024 Lumír Balhar <lbalhar@redhat.com> - 2.25.1-8
 - Add support for IPv6 CIDR in no_proxy setting
 Resolves: RHEL-17548
