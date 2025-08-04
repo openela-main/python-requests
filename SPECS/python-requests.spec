@@ -5,7 +5,7 @@
 
 Name:           python-requests
 Version:        2.25.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -62,6 +62,12 @@ Patch6:         support_IPv6_CIDR_in_no_proxy.patch
 # PR: https://github.com/psf/requests/pull/6731
 # The issue it tries to solve: https://github.com/psf/requests/issues/6726
 Patch7:         CVE-2024-35195.patch
+
+# Security fix for CVE-2024-47081
+# Requests vulnerable to .netrc credentials leak via malicious URLs.
+# Fix backported from upstream:
+#   https://github.com/psf/requests/commit/96ba401c1296ab1dda74a2365ef36d88f7d144ef
+Patch8:         CVE-2024-47081.patch
 
 BuildArch:      noarch
 
@@ -138,6 +144,10 @@ sed -i 's/ --doctest-modules//' pytest.ini
 
 
 %changelog
+* Fri Jul 25 2025 Lumír Balhar <lbalhar@redhat.com> - 2.25.1-10
+- Security fix for CVE-2024-47081
+Resolves: RHEL-105461
+
 * Fri Jan 10 2025 Lumír Balhar <lbalhar@redhat.com> - 2.25.1-9
 - Security fix for CVE-2024-35195
 Resolves: RHEL-37609
