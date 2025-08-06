@@ -10,7 +10,7 @@
 
 Name:           python-requests
 Version:        2.20.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        HTTP library, written in Python, for human beings
 
 License:        ASL 2.0
@@ -60,6 +60,12 @@ Patch7:         CVE-2023-32681.patch
 # PR: https://github.com/psf/requests/pull/6731
 # The issue it tries to solve: https://github.com/psf/requests/issues/6726
 Patch8:         CVE-2024-35195.patch
+
+# Security fix for CVE-2024-47081
+# Requests vulnerable to .netrc credentials leak via malicious URLs.
+# Fix backported from upstream:
+#   https://github.com/psf/requests/commit/96ba401c1296ab1dda74a2365ef36d88f7d144ef
+Patch9:         CVE-2024-47081.patch
 
 BuildArch:      noarch
 
@@ -123,6 +129,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m pytest -v
 
 
 %changelog
+* Fri Jul 25 2025 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-6
+- Security fix for CVE-2024-47081
+Resolves: RHEL-102420
+
 * Tue Dec 17 2024 Lumír Balhar <lbalhar@redhat.com> - 2.20.0-5
 - Security fix for CVE-2024-35195
 Resolves: RHEL-37605
