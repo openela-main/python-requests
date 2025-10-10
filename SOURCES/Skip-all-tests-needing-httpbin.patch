@@ -1,0 +1,33 @@
+From 650da6c0267ba711d9d02d2bba8d79540437055f Mon Sep 17 00:00:00 2001
+From: Tomas Orsava <torsava@redhat.com>
+Date: Wed, 13 Jun 2018 15:44:42 +0200
+Subject: [PATCH] Skip all tests needing httpbin
+
+httpbin has too many dependencies to be shipped in RHEL just for
+build-time package tests
+---
+ tests/conftest.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index cd64a76..6cdc95a 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -15,10 +15,12 @@ def prepare_url(value):
+ 
+ 
+ @pytest.fixture
+-def httpbin(httpbin):
++def httpbin():
++    pytest.skip()
+     return prepare_url(httpbin)
+ 
+ 
+ @pytest.fixture
+-def httpbin_secure(httpbin_secure):
++def httpbin_secure():
++    pytest.skip()
+     return prepare_url(httpbin_secure)
+-- 
+2.14.4
+
